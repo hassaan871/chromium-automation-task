@@ -66,27 +66,37 @@ def find_python_files_in_repo(page, repo_url, repo_name):
     file_urls = {}
     visited_urls = set()
     
+    print(f"\n  {'='*60}")
+    print(f"  DETAILED FILE SEARCH FOR: {repo_name}")
+    print(f"  {'='*60}")
+    
     def explore_directory(dir_url, depth=0):
-        if depth > 2 or len(file_urls) >= MAX_FILES_PER_REPO:
+        if len(file_urls) >= MAX_FILES_PER_REPO:
+            print(f"  {'  '*depth}✓ Reached MAX_FILES_PER_REPO ({MAX_FILES_PER_REPO}), stopping search")
+            return
+            
+        if depth > 3:  # Increased from 2 to 3
+            print(f"  {'  '*depth}⚠️  Max depth reached, stopping")
             return
         
         if dir_url in visited_urls:
+            print(f"  {'  '*depth}⤷ Already visited, skipping")
             return
         visited_urls.add(dir_url)
         
         try:
-            print(f"    Exploring: {dir_url.split('/tree/')[-1] if '/tree/' in dir_url else 'root'}")
+            path_display = dir_url.split('/tree/')[-1] if '/tree/' in dir_url else 'root'
+            print(f"  {'  '*depth}📁 Exploring: {path_display}")
             page.goto(dir_url)
             time.sleep(2)
             
             # Find all file and directory entries
-            # Get ALL links on the page and filter them
             entries = page.locator("a[href]").all()
-            print(f"      Found {len(entries)} total links")
+            print(f"  {'  '*depth}   Found {len(entries)} total links on page")
             
             directories = []
-            files_found = 0
-            dirs_found = 0
+            files_found_here = 0
+            dirs_found_here = 0
             
             for entry in entries:
                 try:
@@ -100,31 +110,30 @@ def find_python_files_in_repo(page, repo_url, repo_name):
                     
                     # Python file found
                     if '/blob/' in href and '.py' in href:
-                        # Extract just the filename
                         file_name = href.split('/')[-1]
                         if file_name.endswith('.py'):
                             file_url = f"https://github.com{href}" if href.startswith('/') else href
                             if file_url not in file_urls:
                                 file_urls[file_url] = file_name
-                                files_found += 1
-                                print(f"      Found file: {file_name}")
+                                files_found_here += 1
+                                print(f"  {'  '*depth}   ✓ Found Python file #{len(file_urls)}: {file_name}")
                                 
                                 if len(file_urls) >= MAX_FILES_PER_REPO:
+                                    print(f"  {'  '*depth}   🎯 Reached target of {MAX_FILES_PER_REPO} files!")
                                     return
                     
                     # Directory found
-                    elif '/tree/' in href and depth < 2:
-                        # Extract the directory path
+                    elif '/tree/' in href and depth < 3:  # Increased depth
                         path_parts = href.split('/tree/')
                         if len(path_parts) > 1:
                             dir_path = path_parts[-1]
                             dir_name = dir_path.split('/')[-1].lower()
                             
-                            # Skip common non-source directories
-                            skip_dirs = ['node_modules', '.git', '__pycache__', 'venv', 'env', 'dist', 'build', 'docs', 'documentation', 'examples', 'tests', 'test', '.github', 'assets', 'images', '.vscode', '.idea']
+                            # Reduced skip list - only skip obvious non-source dirs
+                            skip_dirs = ['node_modules', '.git', '__pycache__', 'venv', 'env', 
+                                       'dist', 'build', '.github', '.vscode', '.idea']
                             if not any(skip in dir_name for skip in skip_dirs):
                                 full_dir_url = f"https://github.com{href}" if href.startswith('/') else href
-                                # Clean the URL
                                 if '?' in full_dir_url:
                                     full_dir_url = full_dir_url.split('?')[0]
                                 if '#' in full_dir_url:
@@ -132,24 +141,31 @@ def find_python_files_in_repo(page, repo_url, repo_name):
                                 
                                 if full_dir_url not in directories:
                                     directories.append(full_dir_url)
-                                    dirs_found += 1
+                                    dirs_found_here += 1
                 except:
                     continue
             
-            print(f"      Files at this level: {files_found}, Directories: {dirs_found}")
+            print(f"  {'  '*depth}   Summary: {files_found_here} .py files, {dirs_found_here} subdirs")
             
             # Explore subdirectories
-            print(f"      Will explore {len(directories[:5])} subdirectories")
-            for dir_url_sub in directories[:5]:  # Limit to first 5 directories
-                if len(file_urls) >= MAX_FILES_PER_REPO:
-                    break
-                explore_directory(dir_url_sub, depth + 1)
+            if directories and len(file_urls) < MAX_FILES_PER_REPO:
+                print(f"  {'  '*depth}   Will explore {min(len(directories), 10)} subdirectories...")
+                for dir_url_sub in directories[:10]:  # Increased from 5 to 10
+                    if len(file_urls) >= MAX_FILES_PER_REPO:
+                        break
+                    explore_directory(dir_url_sub, depth + 1)
         
         except Exception as e:
-            print(f"      Error: {e}")
+            print(f"  {'  '*depth}   ❌ Error: {e}")
     
     # Start exploration from the repository root
     explore_directory(repo_url)
+    
+    print(f"  {'='*60}")
+    print(f"  SEARCH COMPLETE: Found {len(file_urls)} Python files")
+    if len(file_urls) < MAX_FILES_PER_REPO:
+        print(f"  ⚠️  WARNING: Only found {len(file_urls)}/{MAX_FILES_PER_REPO} files!")
+    print(f"  {'='*60}\n")
     
     return file_urls
 
@@ -175,7 +191,7 @@ def main():
         page.goto(search_url)
         
         print("Waiting for search results...")
-        time.sleep(5)  # Increased wait time
+        time.sleep(5)
         
         # Wait for results with multiple attempts
         results_loaded = False
@@ -193,7 +209,7 @@ def main():
         
         time.sleep(2)
 
-        # Extract repository information with multiple strategies
+        # Extract repository information
         print("Extracting repository information...")
         repo_links = []
         
@@ -204,15 +220,12 @@ def main():
             
             for item in result_items:
                 try:
-                    # Look for the repository link
                     repo_link = item.locator("a[href*='/'][href*='/']").first
                     href = repo_link.get_attribute("href")
                     text = repo_link.inner_text().strip()
                     
                     if href and '/' in text and text.count('/') == 1:
-                        # Valid repository format: "owner/repo"
                         full_url = f"https://github.com{href}" if href.startswith('/') else href
-                        # Clean up the URL to just the repo path
                         if '/tree/' in full_url or '/blob/' in full_url:
                             full_url = '/'.join(full_url.split('/')[:5])
                         
@@ -234,13 +247,11 @@ def main():
                     try:
                         href = link.get_attribute("href")
                         if href and href.startswith('/') and href.count('/') == 2:
-                            # Pattern: /owner/repo
                             parts = href.strip('/').split('/')
                             if len(parts) == 2 and not any(x in href for x in ['search', 'topics', 'marketplace', 'pricing']):
                                 repo_name = f"{parts[0]}/{parts[1]}"
                                 full_url = f"https://github.com{href}"
                                 
-                                # Avoid duplicates
                                 if not any(r[0] == repo_name for r in repo_links):
                                     repo_links.append((repo_name, full_url))
                                     print(f"  Found: {repo_name}")
@@ -270,7 +281,6 @@ def main():
                 updated = "N/A"
                 
                 try:
-                    # Try to find star count
                     star_elem = page.locator("#repo-stars-counter-star").first
                     if star_elem.count() > 0:
                         stars = star_elem.get_attribute("title") or star_elem.inner_text().strip()
@@ -282,17 +292,12 @@ def main():
                         pass
                 
                 try:
-                    # Try to find last updated date
-                    # Look for "Latest commit" or relative time elements
                     time_elem = page.locator("relative-time").first
                     if time_elem.count() > 0:
-                        # Get the datetime attribute which has the full timestamp
                         updated = time_elem.get_attribute("datetime")
-                        # Also try to get the human-readable version
                         if not updated:
                             updated = time_elem.inner_text().strip()
                     
-                    # Alternative: look for commit date
                     if updated == "N/A" or not updated:
                         commit_time = page.locator("relative-time[datetime]").first
                         if commit_time.count() > 0:
@@ -321,24 +326,41 @@ def main():
         # -------------------------------------------------
         # 2. Visit each repo & extract comments
         # -------------------------------------------------
+        file_processing_summary = {}
+        
         for repo_name, _, _, repo_url in repos:
-            print(f"Processing repo: {repo_name}")
+            print(f"\n{'#'*70}")
+            print(f"PROCESSING REPO: {repo_name}")
+            print(f"{'#'*70}")
+            
+            file_processing_summary[repo_name] = {
+                'files_found': 0,
+                'files_processed': 0,
+                'files_with_comments': 0,
+                'files_without_comments': 0,
+                'total_comments': 0
+            }
+            
             try:
                 # Find Python files
-                print(f"  Searching for Python files...")
+                print(f"Searching for Python files in {repo_name}...")
                 file_urls = find_python_files_in_repo(page, repo_url, repo_name)
+                
+                file_processing_summary[repo_name]['files_found'] = len(file_urls)
 
                 if not file_urls:
-                    print(f"  No Python files found\n")
+                    print(f"❌ No Python files found in {repo_name}\n")
                     continue
 
-                print(f"  Total found: {len(file_urls)} files\n")
+                print(f"✓ Found {len(file_urls)} Python files")
+                print(f"Will process up to {min(len(file_urls), MAX_FILES_PER_REPO)} files\n")
 
                 # Process each Python file
-                py_files_found = 0
+                file_num = 0
                 for file_url, file_name in list(file_urls.items())[:MAX_FILES_PER_REPO]:
+                    file_num += 1
                     try:
-                        print(f"  Processing: {file_name}")
+                        print(f"  [{file_num}/{min(len(file_urls), MAX_FILES_PER_REPO)}] Processing: {file_name}")
                         
                         # Get raw URL
                         raw_url = file_url.replace('/blob/', '/raw/')
@@ -353,22 +375,34 @@ def main():
                             # Extract comments
                             comments = extract_comments_from_code(code_text)
                             
-                            for line_no, comment in comments:
-                                all_comments.append((repo_name, file_name, line_no, comment))
+                            file_processing_summary[repo_name]['files_processed'] += 1
                             
-                            print(f"    Extracted {len(comments)} comments")
-                            py_files_found += 1
+                            if len(comments) > 0:
+                                for line_no, comment in comments:
+                                    all_comments.append((repo_name, file_name, line_no, comment))
+                                
+                                file_processing_summary[repo_name]['files_with_comments'] += 1
+                                file_processing_summary[repo_name]['total_comments'] += len(comments)
+                                print(f"      ✓ Extracted {len(comments)} comments")
+                            else:
+                                file_processing_summary[repo_name]['files_without_comments'] += 1
+                                print(f"      ⚠️  NO COMMENTS found in this file")
                         else:
-                            print(f"    No code content")
+                            print(f"      ❌ No code content retrieved")
                         
                     except Exception as e:
-                        print(f"    Error: {e}")
+                        print(f"      ❌ Error: {e}")
                         continue
 
-                print(f"  Files processed: {py_files_found}\n")
+                print(f"\n  Summary for {repo_name}:")
+                print(f"    Files found: {file_processing_summary[repo_name]['files_found']}")
+                print(f"    Files processed: {file_processing_summary[repo_name]['files_processed']}")
+                print(f"    Files with comments: {file_processing_summary[repo_name]['files_with_comments']}")
+                print(f"    Files without comments: {file_processing_summary[repo_name]['files_without_comments']}")
+                print(f"    Total comments: {file_processing_summary[repo_name]['total_comments']}")
 
             except Exception as e:
-                print(f"Error processing repo: {e}\n")
+                print(f"❌ Error processing repo: {e}\n")
                 continue
 
         # -------------------------------------------------
@@ -379,14 +413,30 @@ def main():
             writer.writerow(["repo", "file", "line", "comment"])
             writer.writerows(all_comments)
 
-        print(f"\n{'='*50}")
-        print(f"COMPLETE!")
-        print(f"{'='*50}")
-        print(f"Repositories: {len(repos)}")
-        print(f"Comments collected: {len(all_comments)}")
-        print(f"\nFiles saved:")
-        print(f"  - repos.csv")
-        print(f"  - comments.csv")
+        print(f"\n{'='*70}")
+        print(f"FINAL SUMMARY")
+        print(f"{'='*70}")
+        print(f"Total repositories: {len(repos)}")
+        print(f"Total comments collected: {len(all_comments)}")
+        print(f"\nPer-Repo Breakdown:")
+        for repo_name, summary in file_processing_summary.items():
+            print(f"\n  {repo_name}:")
+            print(f"    Files found: {summary['files_found']}")
+            print(f"    Files processed: {summary['files_processed']}")
+            print(f"    Files with comments: {summary['files_with_comments']}")
+            print(f"    Files without comments: {summary['files_without_comments']}")
+            print(f"    Total comments: {summary['total_comments']}")
+            
+            if summary['files_found'] < MAX_FILES_PER_REPO:
+                print(f"    ⚠️  WARNING: Only found {summary['files_found']}/{MAX_FILES_PER_REPO} files!")
+            if summary['files_without_comments'] > 0:
+                print(f"    ℹ️  Note: {summary['files_without_comments']} files had no comments")
+        
+        print(f"\n{'='*70}")
+        print(f"Files saved:")
+        print(f"  ✓ repos.csv ({len(repos)} repositories)")
+        print(f"  ✓ comments.csv ({len(all_comments)} comments)")
+        print(f"{'='*70}\n")
         
         browser.close()
 

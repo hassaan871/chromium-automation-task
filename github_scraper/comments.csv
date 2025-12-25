@@ -1,5 +1,25 @@
 repo,file,line,comment
 public-apis/public-apis,__init__.py,1,# -*- coding: utf-8 -*-
+public-apis/public-apis,test_validate_format.py,1,# -*- coding: utf-8 -*-
+public-apis/public-apis,test_validate_format.py,180,"        punctuation = r""""""!""#$%&'*+,-./:;<=>?@[\]^_`{|}~"""""""
+public-apis/public-apis,test_validate_links.py,1,# -*- coding: utf-8 -*-
+public-apis/public-apis,test_validate_links.py,45,"        text = """""""
+public-apis/public-apis,test_validate_links.py,46,            # this is valid
+public-apis/public-apis,test_validate_links.py,48,            http://example.com?param1=1&param2=2#anchor
+public-apis/public-apis,test_validate_links.py,49,            https://www.example.com?param1=1&param2=2#anchor
+public-apis/public-apis,test_validate_links.py,50,            https://www.example.com.br
+public-apis/public-apis,test_validate_links.py,51,            https://www.example.com.gov.br
+public-apis/public-apis,test_validate_links.py,52,            [Example](https://www.example.com?param1=1&param2=2#anchor)
+public-apis/public-apis,test_validate_links.py,53,            lorem ipsum https://www.example.com?param1=1&param2=2#anchor
+public-apis/public-apis,test_validate_links.py,54,            https://www.example.com?param1=1&param2=2#anchor lorem ipsum
+public-apis/public-apis,test_validate_links.py,56,            # this not is valid
+public-apis/public-apis,test_validate_links.py,58,            example.com
+public-apis/public-apis,test_validate_links.py,59,            https:example.com
+public-apis/public-apis,test_validate_links.py,60,            https:/example.com
+public-apis/public-apis,test_validate_links.py,61,            https//example.com
+public-apis/public-apis,test_validate_links.py,62,            https//.com
+public-apis/public-apis,test_validate_links.py,63,"        """""""
+public-apis/public-apis,__init__.py,1,# -*- coding: utf-8 -*-
 public-apis/public-apis,format.py,1,# -*- coding: utf-8 -*-
 public-apis/public-apis,format.py,8,# Temporary replacement
 public-apis/public-apis,format.py,9,# The descriptions that contain () at the end must adapt to the new policy later
@@ -9,36 +29,234 @@ public-apis/public-apis,format.py,98,"        # do not allow ""... API"" in the 
 public-apis/public-apis,format.py,210,        # check each category for the minimum number of entries
 public-apis/public-apis,format.py,230,        # skips lines that we do not care about
 public-apis/public-apis,format.py,242,            # every line segment should start and end with exactly 1 space
-public-apis/public-apis,links.py,1,# -*- coding: utf-8 -*-
-public-apis/public-apis,links.py,13,"    """"""Find links in a text and return a list of URLs."""""""
-public-apis/public-apis,links.py,27,"    """"""Find links in a file and return a list of URLs from text file."""""""
-public-apis/public-apis,links.py,42,"    """"""Check for duplicated links."
-public-apis/public-apis,links.py,44,    Returns a tuple with True or False and duplicate list.
-public-apis/public-apis,links.py,45,"    """""""
-public-apis/public-apis,links.py,66,"    """"""Faking user agent as some hosting services block not-whitelisted UA."""""""
-public-apis/public-apis,links.py,82,"    # Remove routes, arguments and anchors"
-public-apis/public-apis,links.py,96,"    """"""Checks if there is any cloudflare protection in the response."
-public-apis/public-apis,links.py,98,"    Cloudflare implements multiple network protections on a given link,"
-public-apis/public-apis,links.py,99,    this script tries to detect if any of them exist in the response from request.
-public-apis/public-apis,links.py,101,    Common protections have the following HTTP code as a response:
-public-apis/public-apis,links.py,102,        - 403: When host header is missing or incorrect (and more)
-public-apis/public-apis,links.py,103,        - 503: When DDOS protection exists
-public-apis/public-apis,links.py,105,    See more about it at:
-public-apis/public-apis,links.py,106,        - https://support.cloudflare.com/hc/en-us/articles/115003014512-4xx-Client-Error
-public-apis/public-apis,links.py,107,        - https://support.cloudflare.com/hc/en-us/articles/115003011431-Troubleshooting-Cloudflare-5XX-errors
-public-apis/public-apis,links.py,108,        - https://www.cloudflare.com/ddos/
-public-apis/public-apis,links.py,109,        - https://superuser.com/a/888526
-public-apis/public-apis,links.py,111,    Discussions in issues and pull requests:
-public-apis/public-apis,links.py,112,        - https://github.com/public-apis/public-apis/pull/2409
-public-apis/public-apis,links.py,113,        - https://github.com/public-apis/public-apis/issues/2960
-public-apis/public-apis,links.py,114,"    """""""
-public-apis/public-apis,links.py,153,"    """"""Checks if a link is working."
-public-apis/public-apis,links.py,155,"    If an error is identified when the request for the link occurs,"
-public-apis/public-apis,links.py,156,    the return will be a tuple with the first value True and the second
-public-apis/public-apis,links.py,157,    value a string containing the error message.
-public-apis/public-apis,links.py,159,"    If no errors are identified, the return will be a tuple with the"
-public-apis/public-apis,links.py,160,    first value False and the second an empty string.
-public-apis/public-apis,links.py,161,"    """""""
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,1,#!/usr/bin/env python3
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,2,""""""""
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,3,RTL/LTR Markdown Linter.
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,5,This script analyzes Markdown files to identify potential issues
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,6,in the display of mixed Right-To-Left (RTL) and Left-To-Right (LTR) text.
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,7,It reads configuration from a `rtl_linter_config.yml` file located in the same
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,8,directory as the script.
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,10,Key Features:
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,11,- Line-by-line parsing of Markdown list items.
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,12,- Detection of HTML 'dir' attributes to switch text direction context.
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,13,- Handling of nested 'dir' contexts within '<span>' tags.
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,14,- Detection of LTR keywords and symbols that might require Unicode markers.
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,15,- BIDI (Bidirectional Algorithm) visual analysis using the 'python-bidi' library.
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,16,"- Parsing of metadata for book items (title, author, meta)."
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,17,"- Configurable severity levels for detected issues (error, warning, notice)."
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,18,"- Filters to ignore code blocks, inline code, and text within parentheses."
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,19,- Specific check for RTL authors followed by LTR metadata.
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,20,""""""""
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,30,"    """""""
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,31,    Loads configuration from the specified YAML file.
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,33,"    If the file does not exist or an error occurs during loading,"
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,34,    default values will be used.
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,36,    Args:
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,37,        path (str): The path to the YAML configuration file.
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,39,    Returns:
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,40,        dict: A dictionary containing the configuration parameters.
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,41,"              Default values are merged with those loaded from the file,"
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,42,              with the latter taking precedence.
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,43,"    """""""
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,44,    # Default configuration values
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,63,"    # If a path is specified and the file exists, attempt to load it"
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,73,    # Return the configuration (updated defaults or just defaults)
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,78,    '''
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,79,    Checks if the given filename indicates an RTL filename.
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,81,    Args:
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,82,        path (str): The path to the file.
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,84,    Returns:
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,85,"        bool: True if the filename suggests an RTL language, False otherwise."
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,86,    '''
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,90,"# Regex to identify a Markdown list item (e.g., ""* text"", ""- text"")"
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,93,"# Regex to extract title, URL, author, and metadata from a formatted book item"
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,94,# Example: Book Title - Author (Metadata)
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,101,"# Regex to find the dir=""rtl"" or dir=""ltr"" attribute in an HTML tag"
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,104,# Regex to find <span> tags with a dir attribute
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,107,# Regex to identify inline code (text enclosed in single backticks)
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,110,# Regex to identify the start of a code block (```)
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,111,# Can be preceded by spaces or a '>' character (for blockquotes)
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,114,# Regex to identify text entirely enclosed in parentheses or square brackets.
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,115,"# Useful for skipping segments like ""(PDF)"" or ""[Free]"" during analysis."
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,116,BRACKET_CONTENT_RE = re.compile(r'''
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,117,    (?:^|\W)        # Start of line or non-word character
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,118,    (\[|\()         # Open square or round bracket
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,119,    ([^\n\)\]]*?)   # Content
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,120,    (\]|\))         # Close square or round bracket
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,121,    (?:\W|$)        # End of line or non-word character
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,122,"''', re.VERBOSE | re.UNICODE)   # VERBOSE for comments, UNICODE for correct matching"
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,126,"    """""""
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,127,    Splits text into segments based on nested <span> tags with dir attributes.
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,129,    Args:
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,130,        text (str): The input string to split.
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,131,        base_ctx (str): The base directionality context ('rtl' or 'ltr').
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,133,    Returns:
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,134,"        list: A list of tuples, where each tuple contains a text segment (str)"
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,135,              and its corresponding directionality context ('rtl' or 'ltr').
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,137,    Example of stack behavior:
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,138,"        Input: ""Text <span dir='rtl'>RTL <span dir='ltr'>LTR</span> RTL</span> Text"""
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,139,        base_ctx: 'ltr'
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,141,        Initial stack: ['ltr']
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,142,"        Tokens: [""Text "", ""<span dir='rtl'>"", ""RTL "", ""<span dir='ltr'>"", ""LTR"", ""</span>"", "" RTL"", ""</span>"", "" Text""]"
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,144,        Processing:
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,145,"        1. ""Text "": segments.append((""Text "", 'ltr')), stack: ['ltr']"
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,146,"        2. ""<span dir='rtl'>"": stack.append('rtl'), stack: ['ltr', 'rtl']"
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,147,"        3. ""RTL "": segments.append((""RTL "", 'rtl')), stack: ['ltr', 'rtl']"
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,148,"        4. ""<span dir='ltr'>"": stack.append('ltr'), stack: ['ltr', 'rtl', 'ltr']"
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,149,"        5. ""LTR"": segments.append((""LTR"", 'ltr')), stack: ['ltr', 'rtl', 'ltr']"
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,150,"        6. ""</span>"": stack.pop(), stack: ['ltr', 'rtl']"
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,151,"        7. "" RTL"": segments.append(("" RTL"", 'rtl')), stack: ['ltr', 'rtl']"
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,152,"        8. ""</span>"": stack.pop(), stack: ['ltr']"
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,153,"        9. "" Text"": segments.append(("" Text"", 'ltr')), stack: ['ltr']"
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,155,"        Resulting segments: [(""Text "", 'ltr'), (""RTL "", 'rtl'), (""LTR"", 'ltr'), ("" RTL"", 'rtl'), ("" Text"", 'ltr')]"
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,156,"    """""""
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,157,    # Split the text based on <span> tags
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,160,    # Initialize the stack with the base context
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,163,    # Initialize the segments
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,166,    # for each token
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,169,        # Skip empty tokens
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,173,        # Check if the token is an opening <span> tag with a dir attribute
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,176,"        # If so, push the new context onto the stack"
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,180,        # If the token is a closing </span> tag
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,183,            # Pop the last context from the stack
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,187,"        # Otherwise, if the token is not a span tag, it's a text segment."
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,188,"        # So, we need to append the tuple (segment, current context) to segments[]"
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,189,        # Where the current context is the top element of the stack.
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,192,    # return the list of tuples
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,197,"    """""""
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,198,    Analyzes a single Markdown file for RTL/LTR issues.
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,200,    Args:
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,201,        path (str): The path to the Markdown file to analyze.
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,202,        cfg (dict): The configuration dictionary.
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,204,    Returns:
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,205,"        list: A list of strings, where each string represents a detected issue,"
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,206,              formatted for GitHub Actions output.
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,207,"    """""""
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,208,    # Initialize the list of issues
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,211,    # Try to read the file content and handle potential errors
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,217,    # Extract configuration parameters for easier access and readability
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,226,    # chr(0x200F) = RLM Unicode character
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,227,    # chr(0x200E) = LRM Unicode character
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,228,"    # These control character must be added here in the code and not in the YAML configuration file,"
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,229,"    # due to the fact that if we included them in the YAML file they would be invisible and, therefore,"
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,230,    # the YAML file would be less readable
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,234,    # Determine the directionality context of the file (RTL or LTR) based on the filename
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,237,    # Stack to manage block-level direction contexts for nested divs.
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,238,    # Initialized with the file's base direction context.
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,241,    # Iterate over each line of the file with its line number
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,244,        # The active block direction context for the current line is the top of the stack.
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,247,        # Skip lines that start a code block (```)
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,250,        # Find all opening and closing <div> tags on the line to handle cases
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,251,        # where there can be multiple <div> opening and closing on the same line
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,254,        # Process each found tag in order to correctly update the context stack
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,256,            # re.findall with multiple capture groups returns a list of tuples:
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,257,"            # tag: The full matched tag (e.g., '<div...>' or '</div>')"
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,258,"            # direction: The captured direction ('rtl' or 'ltr'), or empty for a closing tag"
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,261,"            # If it's an opening tag with 'markdown=""1""', push the new context"
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,264,"            # If it's a closing tag and we are inside a div, pop the context"
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,267,        # Check if the line is a Markdown list item
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,270,"        # If the line is not a list item, skip to the next line"
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,273,        # Extract the text content of the list item and remove leading/trailing whitespace
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,276,"        # Extract item parts (title, author, metadata) if it matches the book format"
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,279,        # If the current line is a book item
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,282,"            # Extract title, author, and metadata from the book item"
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,287,"            # If the list item is just a link like the link in the section ""### Index"" of the .md files (i.e., [Title](url))"
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,290,"        # Otherwise, if it's not a book item"
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,293,"            # Initialize title, author, and meta with empty strings"
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,296,            # Set is_link_only_item to False
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,299,"        # Specific check: RTL author followed by LTR metadata (e.g., اسم المؤلف (PDF))"
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,309,"        # Analyze individual parts of the item (title, author, metadata)"
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,312,"            # Skip if the part is empty or if it's metadata to be ignored (e.g., ""PDF"")"
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,315,            # Split the part into segments based on <span> tags with dir attributes
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,318,            # Filter keywords to avoid duplicates with symbols (a symbol can contain a keyword)
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,323,            # Iterate over each text segment and its directionality context
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,326,                # Remove leading/trailing whitespace from the segment text
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,329,"                # In the following block of code, it's checked if the segment is entirely enclosed in parentheses or brackets."
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,330,"                # In fact, if the content inside is purely LTR or RTL, its display is usually"
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,331,                # well-isolated by the parentheses or brackets and less prone to BIDI issues.
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,332,                # Mixed LTR/RTL content inside brackets should still be checked.
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,334,                # Check if the segment is entirely enclosed in parentheses or brackets.
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,338,"                    # If it is, extract the content inside the parentheses/brackets."
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,341,                    # Determine if the inner content is purely LTR or purely RTL.
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,344,                    # Check for pure RTL: contains RTL chars AND no LTR chars (using [A-Za-z0-9] as a proxy for common LTR chars)
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,347,                    # Skip the segment ONLY if the content inside is purely LTR or purely RTL.
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,350,"                # Skip if it's inline code (i.e., `...`) or already contains directionality markers (e.g., &rlm; or &lrm;)"
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,357,                # Check for BIDI mismatch: if the text contains both RTL and LTR
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,358,                # characters and the calculated visual order differs from the logical order.
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,366,"                # If the segment context is LTR, there is no need to check LTR keywords and LTR symbols"
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,367,"                # that might need directionality markers, so we can skip the next checks and move on to the next line of the file"
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,370,"                # Skip keyword and symbol checks for titles of link-only items (e.g., in the Index section of markdown files)"
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,373,                    # Check for LTR symbols: if an LTR symbol is present and lacks an '&lrm;' marker
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,380,                    # Check for LTR keywords: if an LTR keyword is present and lacks an RLM marker
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,387,"                # Check for ""Pure LTR"" text: if the segment is entirely LTR,"
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,388,"                # it's not a title, and has a minimum length, it might need a trailing RLM."
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,394,    # Check for unclosed div tags at the end of the file
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,401,    # Return the list of found issues
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,405,"    """""""
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,406,    Returns a set of line numbers (1-based) that were changed in the given file in the current PR.
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,408,    This function uses 'git diff' to compare the current branch with 'origin/main' and extracts
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,409,    the line numbers of added or modified lines. It is used to restrict PR annotations to only
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,410,    those lines that have been changed in the pull request.
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,412,    Args:
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,413,        filepath (str): The path to the file to check for changes.
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,415,    Returns:
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,416,        set: A set of 1-based line numbers that were added or modified in the file.
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,418,    Note:
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,419,        - Requires that the script is run inside a Git repository.
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,420,"        - If the merge base cannot be found, returns an empty set and does not print errors."
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,421,"    """""""
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,425,        # Get the diff for the file (unified=0 for no context lines)
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,432,"                # Example: @@ -10,0 +11,3 @@"
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,440,"        # Silently ignore errors (e.g., unable to find merge base)"
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,446,"    """""""
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,447,    Main entry point for the RTL/LTR Markdown linter.
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,449,"    Parses command-line arguments, loads configuration, and scans the specified files or directories"
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,450,"    for Markdown files. For each file, it detects RTL/LTR issues and writes all findings to a log file."
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,451,"    For files changed in the current PR, only issues on changed lines are printed to stdout as GitHub"
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,452,    Actions annotations.
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,454,"    Exit code is 1 if any error or warning is found on changed lines, otherwise 0."
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,456,    Command-line arguments:
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,457,        paths_to_scan: List of files or directories to scan for issues.
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,458,        --changed-files: List of files changed in the PR (for annotation filtering).
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,459,        --log-file: Path to the output log file (default: rtl-linter-output.log).
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,460,"    """""""
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,461,    # Create an ArgumentParser object to handle command-line arguments
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,466,    # Argument for files/directories to scan
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,473,    # Optional argument for changed files (for PR annotation filtering)
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,481,    # Optional argument for the log file path
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,488,    # Parse the command-line arguments
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,491,    # Determine the directory where the script is located to find the config file
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,494,    # Load the configuration from 'rtl_linter_config.yml'
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,497,    # Initialize counters for total files processed and errors/warnings found
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,500,    # Count errors/warnings ONLY on changed/added lines for PR annotation exit code
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,503,    # Normalize changed file paths for consistent comparison
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,506,    # Build a map: {filepath: set(line_numbers)} for changed files
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,511,    # Flag to check if any issues were found
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,514,    # Open the specified log file in write mode with UTF-8 encoding
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,517,        # Iterate over each path provided in 'paths_to_scan'
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,520,"            # Normalize the scan path to ensure consistent handling (e.g., slashes)"
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,523,"            # If the path is a directory, recursively scan for .md files"
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,526,                # Walk through the directory and its subdirectories to find all Markdown files
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,529,                    # For each file in the directory
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,532,"                        # If the file is a Markdown file, lint it"
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,538,                            # Process each issue found
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,543,                                # For GitHub Actions PR annotations: print only if the file is changed
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,544,                                # and the issue is on a line that was actually modified or added in the PR
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,550,                                        # Count errors on changed lines for the exit code logic
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,554,                                # Count all errors/warnings for reporting/debugging purposes
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,558,"            # If the path is a Markdown file, lint it directly"
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,563,                # Process each issue found
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,566,                    # Always write the issue to the log file for full reporting
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,570,                    # For GitHub Actions PR annotations: print only if the file is changed
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,571,                    # and the issue is on a line that was actually modified or added in the PR
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,574,"                        # Extract the line number from the issue string (e.g., ...line=123::)"
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,579,                            # For GitHub Actions PR annotations: print the annotation
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,580,                            # so that GitHub Actions can display it in the PR summary
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,583,                            # Count errors on changed lines for the exit code logic
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,587,                    # Count all errors/warnings for reporting/debugging purposes
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,591,"    # If no issues were found, remove the log file"
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,598,    # Print a debug message to stderr summarizing the linting process
+EbookFoundation/free-programming-books,rtl_ltr_linter.py,601,    # Exit code: 1 only if there are annotated errors/warnings on changed lines
 vinta/awesome-python,sort.py,1,#!/usr/bin/env python
 vinta/awesome-python,sort.py,2,# coding: utf-8
 vinta/awesome-python,sort.py,4,""""""""
