@@ -1,0 +1,187 @@
+repo,file,line,comment
+public-apis/public-apis,__init__.py,1,# -*- coding: utf-8 -*-
+public-apis/public-apis,format.py,1,# -*- coding: utf-8 -*-
+public-apis/public-apis,format.py,8,# Temporary replacement
+public-apis/public-apis,format.py,9,# The descriptions that contain () at the end must adapt to the new policy later
+public-apis/public-apis,format.py,31,# Type aliases
+public-apis/public-apis,format.py,93,"    # url should be wrapped in ""[TITLE](LINK)"" Markdown syntax"
+public-apis/public-apis,format.py,98,"        # do not allow ""... API"" in the entry title"
+public-apis/public-apis,format.py,210,        # check each category for the minimum number of entries
+public-apis/public-apis,format.py,230,        # skips lines that we do not care about
+public-apis/public-apis,format.py,242,            # every line segment should start and end with exactly 1 space
+public-apis/public-apis,links.py,1,# -*- coding: utf-8 -*-
+public-apis/public-apis,links.py,13,"    """"""Find links in a text and return a list of URLs."""""""
+public-apis/public-apis,links.py,27,"    """"""Find links in a file and return a list of URLs from text file."""""""
+public-apis/public-apis,links.py,42,"    """"""Check for duplicated links."
+public-apis/public-apis,links.py,44,    Returns a tuple with True or False and duplicate list.
+public-apis/public-apis,links.py,45,"    """""""
+public-apis/public-apis,links.py,66,"    """"""Faking user agent as some hosting services block not-whitelisted UA."""""""
+public-apis/public-apis,links.py,82,"    # Remove routes, arguments and anchors"
+public-apis/public-apis,links.py,96,"    """"""Checks if there is any cloudflare protection in the response."
+public-apis/public-apis,links.py,98,"    Cloudflare implements multiple network protections on a given link,"
+public-apis/public-apis,links.py,99,    this script tries to detect if any of them exist in the response from request.
+public-apis/public-apis,links.py,101,    Common protections have the following HTTP code as a response:
+public-apis/public-apis,links.py,102,        - 403: When host header is missing or incorrect (and more)
+public-apis/public-apis,links.py,103,        - 503: When DDOS protection exists
+public-apis/public-apis,links.py,105,    See more about it at:
+public-apis/public-apis,links.py,106,        - https://support.cloudflare.com/hc/en-us/articles/115003014512-4xx-Client-Error
+public-apis/public-apis,links.py,107,        - https://support.cloudflare.com/hc/en-us/articles/115003011431-Troubleshooting-Cloudflare-5XX-errors
+public-apis/public-apis,links.py,108,        - https://www.cloudflare.com/ddos/
+public-apis/public-apis,links.py,109,        - https://superuser.com/a/888526
+public-apis/public-apis,links.py,111,    Discussions in issues and pull requests:
+public-apis/public-apis,links.py,112,        - https://github.com/public-apis/public-apis/pull/2409
+public-apis/public-apis,links.py,113,        - https://github.com/public-apis/public-apis/issues/2960
+public-apis/public-apis,links.py,114,"    """""""
+public-apis/public-apis,links.py,153,"    """"""Checks if a link is working."
+public-apis/public-apis,links.py,155,"    If an error is identified when the request for the link occurs,"
+public-apis/public-apis,links.py,156,    the return will be a tuple with the first value True and the second
+public-apis/public-apis,links.py,157,    value a string containing the error message.
+public-apis/public-apis,links.py,159,"    If no errors are identified, the return will be a tuple with the"
+public-apis/public-apis,links.py,160,    first value False and the second an empty string.
+public-apis/public-apis,links.py,161,"    """""""
+vinta/awesome-python,sort.py,1,#!/usr/bin/env python
+vinta/awesome-python,sort.py,2,# coding: utf-8
+vinta/awesome-python,sort.py,4,""""""""
+vinta/awesome-python,sort.py,5,    The approach taken is explained below. I decided to do it simply.
+vinta/awesome-python,sort.py,6,    Initially I was considering parsing the data into some sort of
+vinta/awesome-python,sort.py,7,    structure and then generating an appropriate README. I am still
+vinta/awesome-python,sort.py,8,    considering doing it - but for now this should work. The only issue
+vinta/awesome-python,sort.py,9,"    I see is that it only sorts the entries at the lowest level, and that"
+vinta/awesome-python,sort.py,10,    the order of the top-level contents do not match the order of the actual
+vinta/awesome-python,sort.py,11,    entries.
+vinta/awesome-python,sort.py,13,"    This could be extended by having nested blocks, sorting them recursively"
+vinta/awesome-python,sort.py,14,    and flattening the end structure into a list of lines. Revision 2 maybe ^.^.
+vinta/awesome-python,sort.py,15,""""""""
+vinta/awesome-python,sort.py,18,"    # First, we load the current README into memory"
+vinta/awesome-python,sort.py,22,    # Separating the 'table of contents' from the contents (blocks)
+vinta/awesome-python,sort.py,31,    # Sorting the libraries
+vinta/awesome-python,sort.py,38,    # Replacing the non-sorted libraries by the sorted ones and gathering all at the final_README file
+vinta/awesome-python,sort.py,46,"    # First, we load the current README into memory as an array of lines"
+vinta/awesome-python,sort.py,50,    # Then we cluster the lines together as blocks
+vinta/awesome-python,sort.py,51,    # Each block represents a collection of lines that should be sorted
+vinta/awesome-python,sort.py,52,    # This was done by assuming only links ([...](...)) are meant to be sorted
+vinta/awesome-python,sort.py,53,    # Clustering is done by indentation
+vinta/awesome-python,sort.py,71,        # Then all of the blocks are sorted individually
+vinta/awesome-python,sort.py,75,        # And the result is written back to README.md
+vinta/awesome-python,sort.py,78,    # Then we call the sorting method
+TheAlgorithms/Python,butterworth_filter.py,5,""""""""
+TheAlgorithms/Python,butterworth_filter.py,6,Create 2nd-order IIR filters with Butterworth design.
+TheAlgorithms/Python,butterworth_filter.py,8,Code based on https://webaudio.github.io/Audio-EQ-Cookbook/audio-eq-cookbook.html
+TheAlgorithms/Python,butterworth_filter.py,9,"Alternatively you can use scipy.signal.butter, which should yield the same results."
+TheAlgorithms/Python,butterworth_filter.py,10,""""""""
+TheAlgorithms/Python,butterworth_filter.py,18,"    """""""
+TheAlgorithms/Python,butterworth_filter.py,19,    Creates a low-pass filter
+TheAlgorithms/Python,butterworth_filter.py,21,"    >>> filter = make_lowpass(1000, 48000)"
+TheAlgorithms/Python,butterworth_filter.py,22,    >>> filter.a_coeffs + filter.b_coeffs  # doctest: +NORMALIZE_WHITESPACE
+TheAlgorithms/Python,butterworth_filter.py,23,"    [1.0922959556412573, -1.9828897227476208, 0.9077040443587427, 0.004277569313094809,"
+TheAlgorithms/Python,butterworth_filter.py,24,"     0.008555138626189618, 0.004277569313094809]"
+TheAlgorithms/Python,butterworth_filter.py,25,"    """""""
+TheAlgorithms/Python,butterworth_filter.py,48,"    """""""
+TheAlgorithms/Python,butterworth_filter.py,49,    Creates a high-pass filter
+TheAlgorithms/Python,butterworth_filter.py,51,"    >>> filter = make_highpass(1000, 48000)"
+TheAlgorithms/Python,butterworth_filter.py,52,    >>> filter.a_coeffs + filter.b_coeffs  # doctest: +NORMALIZE_WHITESPACE
+TheAlgorithms/Python,butterworth_filter.py,53,"    [1.0922959556412573, -1.9828897227476208, 0.9077040443587427, 0.9957224306869052,"
+TheAlgorithms/Python,butterworth_filter.py,54,"     -1.9914448613738105, 0.9957224306869052]"
+TheAlgorithms/Python,butterworth_filter.py,55,"    """""""
+TheAlgorithms/Python,butterworth_filter.py,78,"    """""""
+TheAlgorithms/Python,butterworth_filter.py,79,    Creates a band-pass filter
+TheAlgorithms/Python,butterworth_filter.py,81,"    >>> filter = make_bandpass(1000, 48000)"
+TheAlgorithms/Python,butterworth_filter.py,82,    >>> filter.a_coeffs + filter.b_coeffs  # doctest: +NORMALIZE_WHITESPACE
+TheAlgorithms/Python,butterworth_filter.py,83,"    [1.0922959556412573, -1.9828897227476208, 0.9077040443587427, 0.06526309611002579,"
+TheAlgorithms/Python,butterworth_filter.py,84,"     0, -0.06526309611002579]"
+TheAlgorithms/Python,butterworth_filter.py,85,"    """""""
+TheAlgorithms/Python,butterworth_filter.py,109,"    """""""
+TheAlgorithms/Python,butterworth_filter.py,110,    Creates an all-pass filter
+TheAlgorithms/Python,butterworth_filter.py,112,"    >>> filter = make_allpass(1000, 48000)"
+TheAlgorithms/Python,butterworth_filter.py,113,    >>> filter.a_coeffs + filter.b_coeffs  # doctest: +NORMALIZE_WHITESPACE
+TheAlgorithms/Python,butterworth_filter.py,114,"    [1.0922959556412573, -1.9828897227476208, 0.9077040443587427, 0.9077040443587427,"
+TheAlgorithms/Python,butterworth_filter.py,115,"     -1.9828897227476208, 1.0922959556412573]"
+TheAlgorithms/Python,butterworth_filter.py,116,"    """""""
+TheAlgorithms/Python,butterworth_filter.py,137,"    """""""
+TheAlgorithms/Python,butterworth_filter.py,138,    Creates a peak filter
+TheAlgorithms/Python,butterworth_filter.py,140,"    >>> filter = make_peak(1000, 48000, 6)"
+TheAlgorithms/Python,butterworth_filter.py,141,    >>> filter.a_coeffs + filter.b_coeffs  # doctest: +NORMALIZE_WHITESPACE
+TheAlgorithms/Python,butterworth_filter.py,142,"    [1.0653405327119334, -1.9828897227476208, 0.9346594672880666, 1.1303715025601122,"
+TheAlgorithms/Python,butterworth_filter.py,143,"     -1.9828897227476208, 0.8696284974398878]"
+TheAlgorithms/Python,butterworth_filter.py,144,"    """""""
+TheAlgorithms/Python,butterworth_filter.py,169,"    """""""
+TheAlgorithms/Python,butterworth_filter.py,170,    Creates a low-shelf filter
+TheAlgorithms/Python,butterworth_filter.py,172,"    >>> filter = make_lowshelf(1000, 48000, 6)"
+TheAlgorithms/Python,butterworth_filter.py,173,    >>> filter.a_coeffs + filter.b_coeffs  # doctest: +NORMALIZE_WHITESPACE
+TheAlgorithms/Python,butterworth_filter.py,174,"    [3.0409336710888786, -5.608870992220748, 2.602157875636628, 3.139954022810743,"
+TheAlgorithms/Python,butterworth_filter.py,175,"     -5.591841778072785, 2.5201667380627257]"
+TheAlgorithms/Python,butterworth_filter.py,176,"    """""""
+TheAlgorithms/Python,butterworth_filter.py,206,"    """""""
+TheAlgorithms/Python,butterworth_filter.py,207,    Creates a high-shelf filter
+TheAlgorithms/Python,butterworth_filter.py,209,"    >>> filter = make_highshelf(1000, 48000, 6)"
+TheAlgorithms/Python,butterworth_filter.py,210,    >>> filter.a_coeffs + filter.b_coeffs  # doctest: +NORMALIZE_WHITESPACE
+TheAlgorithms/Python,butterworth_filter.py,211,"    [2.2229172136088806, -3.9587208137297303, 1.7841414181566304, 4.295432981120543,"
+TheAlgorithms/Python,butterworth_filter.py,212,"     -7.922740859457287, 3.6756456963725253]"
+TheAlgorithms/Python,butterworth_filter.py,213,"    """""""
+TheAlgorithms/Python,iir_filter.py,5,"    r"""""""
+TheAlgorithms/Python,iir_filter.py,6,    N-Order IIR filter
+TheAlgorithms/Python,iir_filter.py,7,"    Assumes working with float samples normalized on [-1, 1]"
+TheAlgorithms/Python,iir_filter.py,9,    ---
+TheAlgorithms/Python,iir_filter.py,11,    Implementation details:
+TheAlgorithms/Python,iir_filter.py,12,    Based on the 2nd-order function from
+TheAlgorithms/Python,iir_filter.py,13,"    https://en.wikipedia.org/wiki/Digital_biquad_filter,"
+TheAlgorithms/Python,iir_filter.py,14,    this generalized N-order function was made.
+TheAlgorithms/Python,iir_filter.py,16,    Using the following transfer function
+TheAlgorithms/Python,iir_filter.py,17,        .. math:: H(z)=\frac{b_{0}+b_{1}z^{-1}+b_{2}z^{-2}+...+b_{k}z^{-k}}
+TheAlgorithms/Python,iir_filter.py,18,                  {a_{0}+a_{1}z^{-1}+a_{2}z^{-2}+...+a_{k}z^{-k}}
+TheAlgorithms/Python,iir_filter.py,20,    we can rewrite this to
+TheAlgorithms/Python,iir_filter.py,21,        .. math:: y[n]={\frac{1}{a_{0}}}
+TheAlgorithms/Python,iir_filter.py,22,                  \left(\left(b_{0}x[n]+b_{1}x[n-1]+b_{2}x[n-2]+...+b_{k}x[n-k]\right)-
+TheAlgorithms/Python,iir_filter.py,23,                  \left(a_{1}y[n-1]+a_{2}y[n-2]+...+a_{k}y[n-k]\right)\right)
+TheAlgorithms/Python,iir_filter.py,24,"    """""""
+TheAlgorithms/Python,iir_filter.py,29,        # a_{0} ... a_{k}
+TheAlgorithms/Python,iir_filter.py,31,        # b_{0} ... b_{k}
+TheAlgorithms/Python,iir_filter.py,34,        # x[n-1] ... x[n-k]
+TheAlgorithms/Python,iir_filter.py,36,        # y[n-1] ... y[n-k]
+TheAlgorithms/Python,iir_filter.py,40,"        """""""
+TheAlgorithms/Python,iir_filter.py,41,        Set the coefficients for the IIR filter.
+TheAlgorithms/Python,iir_filter.py,42,        These should both be of size `order` + 1.
+TheAlgorithms/Python,iir_filter.py,43,"        :math:`a_0` may be left out, and it will use 1.0 as default value."
+TheAlgorithms/Python,iir_filter.py,45,        This method works well with scipy's filter design functions
+TheAlgorithms/Python,iir_filter.py,47,        >>> # Make a 2nd-order 1000Hz butterworth lowpass filter
+TheAlgorithms/Python,iir_filter.py,48,        >>> import scipy.signal
+TheAlgorithms/Python,iir_filter.py,49,"        >>> b_coeffs, a_coeffs = scipy.signal.butter(2, 1000,"
+TheAlgorithms/Python,iir_filter.py,50,"        ...                                          btype='lowpass',"
+TheAlgorithms/Python,iir_filter.py,51,        ...                                          fs=48000)
+TheAlgorithms/Python,iir_filter.py,52,        >>> filt = IIRFilter(2)
+TheAlgorithms/Python,iir_filter.py,53,"        >>> filt.set_coefficients(a_coeffs, b_coeffs)"
+TheAlgorithms/Python,iir_filter.py,54,"        """""""
+TheAlgorithms/Python,iir_filter.py,76,"        """""""
+TheAlgorithms/Python,iir_filter.py,77,        Calculate :math:`y[n]`
+TheAlgorithms/Python,iir_filter.py,79,        >>> filt = IIRFilter(2)
+TheAlgorithms/Python,iir_filter.py,80,        >>> filt.process(0)
+TheAlgorithms/Python,iir_filter.py,81,        0.0
+TheAlgorithms/Python,iir_filter.py,82,"        """""""
+TheAlgorithms/Python,iir_filter.py,85,        # Start at index 1 and do index 0 at the end.
+TheAlgorithms/Python,show_response.py,14,"        """""""
+TheAlgorithms/Python,show_response.py,15,        Calculate y[n]
+TheAlgorithms/Python,show_response.py,17,"        >>> issubclass(FilterType, Protocol)"
+TheAlgorithms/Python,show_response.py,18,        True
+TheAlgorithms/Python,show_response.py,19,"        """""""
+TheAlgorithms/Python,show_response.py,25,"    """""""
+TheAlgorithms/Python,show_response.py,26,    Get bounds for printing fft results
+TheAlgorithms/Python,show_response.py,28,    >>> import numpy
+TheAlgorithms/Python,show_response.py,29,"    >>> array = numpy.linspace(-20.0, 20.0, 1000)"
+TheAlgorithms/Python,show_response.py,30,"    >>> get_bounds(array, 1000)"
+TheAlgorithms/Python,show_response.py,31,"    (-20, 20)"
+TheAlgorithms/Python,show_response.py,32,"    """""""
+TheAlgorithms/Python,show_response.py,39,"    """""""
+TheAlgorithms/Python,show_response.py,40,    Show frequency response of a filter
+TheAlgorithms/Python,show_response.py,42,    >>> from audio_filters.iir_filter import IIRFilter
+TheAlgorithms/Python,show_response.py,43,    >>> filt = IIRFilter(4)
+TheAlgorithms/Python,show_response.py,44,"    >>> show_frequency_response(filt, 48000)"
+TheAlgorithms/Python,show_response.py,45,"    """""""
+TheAlgorithms/Python,show_response.py,56,    # Frequencies on log scale from 24 to nyquist frequency
+TheAlgorithms/Python,show_response.py,61,    # Display within reasonable bounds
+TheAlgorithms/Python,show_response.py,71,"    """""""
+TheAlgorithms/Python,show_response.py,72,    Show phase response of a filter
+TheAlgorithms/Python,show_response.py,74,    >>> from audio_filters.iir_filter import IIRFilter
+TheAlgorithms/Python,show_response.py,75,    >>> filt = IIRFilter(4)
+TheAlgorithms/Python,show_response.py,76,"    >>> show_phase_response(filt, 48000)"
+TheAlgorithms/Python,show_response.py,77,"    """""""
+TheAlgorithms/Python,show_response.py,87,    # Frequencies on log scale from 24 to nyquist frequency
