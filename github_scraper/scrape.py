@@ -7,61 +7,73 @@ SEARCH_QUERY = "language:Python stars:>100 pushed:>2024-01-01"
 MAX_REPOS = 5
 MAX_FILES_PER_REPO = 5
 
-
 def extract_comments_from_code(code_text):
-    """Extract Python comments from code text."""
+    """Extract Python comments from code text (# comments and function/class docstrings)."""
     comments = []
     lines = code_text.split('\n')
     in_docstring = False
     docstring_char = None
+    after_definition = False
     
     for i, line in enumerate(lines, 1):
         stripped = line.strip()
         
-        # Skip empty lines
+        # Skip empty lines (but track if we just passed a definition)
         if not stripped:
             continue
         
-        # Handle single-line comments
-        if stripped.startswith('#'):
-            comments.append((i, line.rstrip()))
+        # Check if this line is a function or class definition
+        if stripped.startswith('def ') or stripped.startswith('class '):
+            after_definition = True
             continue
         
-        # Handle docstrings
+        # Handle single-line comments (# comments)
+        if stripped.startswith('#'):
+            comments.append((i, line.rstrip()))
+            after_definition = False
+            continue
+        
+        # Check for triple quotes (docstrings)
         if '"""' in line or "'''" in line:
             if '"""' in line:
                 char = '"""'
             else:
                 char = "'''"
             
-            # Count occurrences
             count = line.count(char)
             
             if not in_docstring:
-                # Starting a docstring
-                in_docstring = True
-                docstring_char = char
-                comments.append((i, line.rstrip()))
-                
-                # Check if it's a single-line docstring
-                if count == 2:
-                    in_docstring = False
+                # Only capture if it's right after a function/class definition
+                if after_definition and stripped.startswith(char):
+                    in_docstring = True
+                    docstring_char = char
+                    comments.append((i, line.rstrip()))
+                    
+                    # Check if it's a single-line docstring
+                    if count >= 2:
+                        in_docstring = False
+                        after_definition = False
+                else:
+                    after_definition = False
             else:
-                # Ending a docstring
+                # We're inside a docstring, capture the line
                 comments.append((i, line.rstrip()))
                 if char == docstring_char:
                     in_docstring = False
+                    after_definition = False
         elif in_docstring:
             # Inside a multi-line docstring
             comments.append((i, line.rstrip()))
+        else:
+            # Any other code line means we're past the potential docstring position
+            after_definition = False
     
     return comments
-
 
 def find_python_files_in_repo(page, repo_url, repo_name):
     """
     Find Python files in a repository by exploring directories.
-    Returns a dict of {file_url: file_name}
+    Returns a dict of {file_url: file_path}
     """
     file_urls = {}
     visited_urls = set()
@@ -75,7 +87,7 @@ def find_python_files_in_repo(page, repo_url, repo_name):
             print(f"  {'  '*depth}✓ Reached MAX_FILES_PER_REPO ({MAX_FILES_PER_REPO}), stopping search")
             return
             
-        if depth > 3:  # Increased from 2 to 3
+        if depth > 5:  # INCREASED from 3 to 5
             print(f"  {'  '*depth}⚠️  Max depth reached, stopping")
             return
         
@@ -87,12 +99,35 @@ def find_python_files_in_repo(page, repo_url, repo_name):
         try:
             path_display = dir_url.split('/tree/')[-1] if '/tree/' in dir_url else 'root'
             print(f"  {'  '*depth}📁 Exploring: {path_display}")
-            page.goto(dir_url)
-            time.sleep(2)
+            
+            # ENHANCED: Increased timeout and added network idle wait
+            page.goto(dir_url, timeout=90000, wait_until="networkidle")
+            
+            # ENHANCED: Wait longer for JavaScript to render content
+            time.sleep(4)  # Increased from 2 to 4 seconds
+            
+            # Additional wait for GitHub's lazy-loaded content
+            try:
+                page.wait_for_selector("div[role='grid'], div[role='rowgroup']", timeout=5000)
+            except:
+                pass  # Continue even if selector not found
+            
+            time.sleep(2)  # Additional buffer
             
             # Find all file and directory entries
             entries = page.locator("a[href]").all()
             print(f"  {'  '*depth}   Found {len(entries)} total links on page")
+            
+            # DEBUG: Sample some hrefs to understand the structure
+            if depth <= 1:
+                print(f"  {'  '*depth}   🔍 DEBUG: Sampling first 20 hrefs...")
+                for i, entry in enumerate(entries[:20]):
+                    try:
+                        href = entry.get_attribute("href")
+                        if href and ('tree' in href or 'blob' in href or '.py' in href):
+                            print(f"  {'  '*depth}      [{i}] {href[:100]}")
+                    except:
+                        continue
             
             directories = []
             files_found_here = 0
@@ -104,53 +139,92 @@ def find_python_files_in_repo(page, repo_url, repo_name):
                     if not href:
                         continue
                     
-                    # Must be a GitHub URL with proper path
-                    if not ('github.com' in href or href.startswith('/')):
+                    # ENHANCED: More flexible URL detection
+                    is_github_url = ('github.com' in href or href.startswith('/'))
+                    if not is_github_url:
                         continue
                     
-                    # Python file found
-                    if '/blob/' in href and '.py' in href:
+                    # Python file found - ENHANCED detection
+                    if ('/blob/' in href and '.py' in href) or href.endswith('.py'):
                         file_name = href.split('/')[-1]
                         if file_name.endswith('.py'):
                             file_url = f"https://github.com{href}" if href.startswith('/') else href
+                            
+                            # Extract the full file path from the URL
+                            if '/blob/' in file_url:
+                                parts = file_url.split('/blob/')
+                                if len(parts) > 1:
+                                    path_parts = parts[1].split('/', 1)
+                                    if len(path_parts) > 1:
+                                        file_path = path_parts[1]
+                                    else:
+                                        file_path = file_name
+                                else:
+                                    file_path = file_name
+                            else:
+                                file_path = file_name
+                            
                             if file_url not in file_urls:
-                                file_urls[file_url] = file_name
+                                file_urls[file_url] = file_path
                                 files_found_here += 1
-                                print(f"  {'  '*depth}   ✓ Found Python file #{len(file_urls)}: {file_name}")
+                                print(f"  {'  '*depth}   ✓ Found Python file #{len(file_urls)}: {file_path}")
                                 
                                 if len(file_urls) >= MAX_FILES_PER_REPO:
                                     print(f"  {'  '*depth}   🎯 Reached target of {MAX_FILES_PER_REPO} files!")
                                     return
                     
-                    # Directory found
-                    elif '/tree/' in href and depth < 3:  # Increased depth
+                    # ENHANCED: Broader directory detection
+                    elif '/tree/' in href and depth < 5:
+                        # Extract directory path
                         path_parts = href.split('/tree/')
                         if len(path_parts) > 1:
                             dir_path = path_parts[-1]
                             dir_name = dir_path.split('/')[-1].lower()
                             
-                            # Reduced skip list - only skip obvious non-source dirs
-                            skip_dirs = ['node_modules', '.git', '__pycache__', 'venv', 'env', 
-                                       'dist', 'build', '.github', '.vscode', '.idea']
-                            if not any(skip in dir_name for skip in skip_dirs):
+                            # REDUCED skip list - be more permissive
+                            skip_dirs = ['node_modules', '.git', '__pycache__']
+                            
+                            # Don't skip based on dir name alone
+                            should_skip = False
+                            for skip in skip_dirs:
+                                if skip in dir_name:
+                                    should_skip = True
+                                    break
+                            
+                            if not should_skip:
                                 full_dir_url = f"https://github.com{href}" if href.startswith('/') else href
+                                
+                                # Clean URL
                                 if '?' in full_dir_url:
                                     full_dir_url = full_dir_url.split('?')[0]
                                 if '#' in full_dir_url:
                                     full_dir_url = full_dir_url.split('#')[0]
                                 
-                                if full_dir_url not in directories:
+                                if full_dir_url not in directories and full_dir_url not in visited_urls:
                                     directories.append(full_dir_url)
                                     dirs_found_here += 1
-                except:
+                    
+                    # ENHANCED: Also check for relative directory links
+                    elif href.startswith('/') and '/tree/' not in href and '/blob/' not in href:
+                        # This might be a directory link in a different format
+                        # Check if it looks like a subdirectory of current repo
+                        if repo_name.replace('/', '') in href.replace('/', ''):
+                            # Try to construct a tree URL
+                            if depth < 5:
+                                potential_dir = f"https://github.com{href}"
+                                if potential_dir not in directories and potential_dir not in visited_urls:
+                                    # Don't add it yet, just note it for potential exploration
+                                    pass
+                
+                except Exception as e:
                     continue
             
-            print(f"  {'  '*depth}   Summary: {files_found_here} .py files, {dirs_found_here} subdirs")
+            print(f"  {'  '*depth}   Summary: {files_found_here} .py files, {dirs_found_here} subdirs detected")
             
             # Explore subdirectories
             if directories and len(file_urls) < MAX_FILES_PER_REPO:
-                print(f"  {'  '*depth}   Will explore {min(len(directories), 10)} subdirectories...")
-                for dir_url_sub in directories[:10]:  # Increased from 5 to 10
+                print(f"  {'  '*depth}   Will explore {min(len(directories), 15)} subdirectories...")  # Increased from 10 to 15
+                for dir_url_sub in directories[:15]:
                     if len(file_urls) >= MAX_FILES_PER_REPO:
                         break
                     explore_directory(dir_url_sub, depth + 1)
@@ -272,46 +346,53 @@ def main():
 
         # Extract stars and last updated date for each repo
         for repo_name, repo_url in repo_links[:MAX_REPOS]:
-            try:
-                print(f"\nVisiting: {repo_name}")
-                page.goto(repo_url)
-                time.sleep(2)
-                
-                stars = "N/A"
-                updated = "N/A"
-                
+            max_retries = 3
+            for attempt in range(max_retries):
                 try:
-                    star_elem = page.locator("#repo-stars-counter-star").first
-                    if star_elem.count() > 0:
-                        stars = star_elem.get_attribute("title") or star_elem.inner_text().strip()
-                except:
-                    try:
-                        star_elem = page.locator("a[href$='/stargazers']").first
-                        stars = star_elem.inner_text().strip()
-                    except:
-                        pass
-                
-                try:
-                    time_elem = page.locator("relative-time").first
-                    if time_elem.count() > 0:
-                        updated = time_elem.get_attribute("datetime")
-                        if not updated:
-                            updated = time_elem.inner_text().strip()
+                    print(f"\nVisiting: {repo_name}" + (f" (Attempt {attempt + 1}/{max_retries})" if attempt > 0 else ""))
+                    page.goto(repo_url, timeout=90000, wait_until="domcontentloaded")
+                    time.sleep(3)
                     
-                    if updated == "N/A" or not updated:
-                        commit_time = page.locator("relative-time[datetime]").first
-                        if commit_time.count() > 0:
-                            updated = commit_time.get_attribute("datetime") or commit_time.inner_text().strip()
+                    stars = "N/A"
+                    updated = "N/A"
+                    
+                    try:
+                        star_elem = page.locator("#repo-stars-counter-star").first
+                        if star_elem.count() > 0:
+                            stars = star_elem.get_attribute("title") or star_elem.inner_text().strip()
+                    except:
+                        try:
+                            star_elem = page.locator("a[href$='/stargazers']").first
+                            stars = star_elem.inner_text().strip()
+                        except:
+                            pass
+                    
+                    try:
+                        time_elem = page.locator("relative-time").first
+                        if time_elem.count() > 0:
+                            updated = time_elem.get_attribute("datetime")
+                            if not updated:
+                                updated = time_elem.inner_text().strip()
+                        
+                        if updated == "N/A" or not updated:
+                            commit_time = page.locator("relative-time[datetime]").first
+                            if commit_time.count() > 0:
+                                updated = commit_time.get_attribute("datetime") or commit_time.inner_text().strip()
+                    except Exception as e:
+                        print(f"  Could not find updated date: {e}")
+                    
+                    repos.append((repo_name, stars, updated, repo_url))
+                    print(f"  Stars: {stars}")
+                    print(f"  Updated: {updated}")
+                    break
+                    
                 except Exception as e:
-                    print(f"  Could not find updated date: {e}")
-                
-                repos.append((repo_name, stars, updated, repo_url))
-                print(f"  Stars: {stars}")
-                print(f"  Updated: {updated}")
-                
-            except Exception as e:
-                print(f"  Error getting repo details: {e}")
-                repos.append((repo_name, "N/A", "N/A", repo_url))
+                    if attempt == max_retries - 1:
+                        print(f"  Error getting repo details after {max_retries} attempts: {e}")
+                        repos.append((repo_name, "N/A", "N/A", repo_url))
+                    else:
+                        print(f"  Timeout, retrying...")
+                        time.sleep(3)
 
         # Save repos.csv
         with open("repos.csv", "w", newline="", encoding="utf-8") as f:
@@ -357,15 +438,15 @@ def main():
 
                 # Process each Python file
                 file_num = 0
-                for file_url, file_name in list(file_urls.items())[:MAX_FILES_PER_REPO]:
+                for file_url, file_path in list(file_urls.items())[:MAX_FILES_PER_REPO]:
                     file_num += 1
                     try:
-                        print(f"  [{file_num}/{min(len(file_urls), MAX_FILES_PER_REPO)}] Processing: {file_name}")
+                        print(f"  [{file_num}/{min(len(file_urls), MAX_FILES_PER_REPO)}] Processing: {file_path}")
                         
                         # Get raw URL
                         raw_url = file_url.replace('/blob/', '/raw/')
                         
-                        page.goto(raw_url)
+                        page.goto(raw_url, timeout=90000)
                         time.sleep(1)
                         
                         # Get code content
@@ -379,7 +460,7 @@ def main():
                             
                             if len(comments) > 0:
                                 for line_no, comment in comments:
-                                    all_comments.append((repo_name, file_name, line_no, comment))
+                                    all_comments.append((repo_name, file_path, line_no, comment))
                                 
                                 file_processing_summary[repo_name]['files_with_comments'] += 1
                                 file_processing_summary[repo_name]['total_comments'] += len(comments)
